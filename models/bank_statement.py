@@ -76,8 +76,7 @@ class account_bank_statement_wizard(models.TransientModel):
             fp.write(binascii.a2b_base64(self.file))
             fp.seek(0)
             values = {}
-            #workbook = xlrd.open_workbook(fp.name)
-            workbook = xlrd.open_workbook('c://01Enero 2022.xlsx')
+            workbook = xlrd.open_workbook(fp.name)
             sheet = workbook.sheet_by_index(0)
             contador = 0
             if self.bank_opt == 'santander':
