@@ -25,14 +25,10 @@ _logger = logging.getLogger(__name__)
 class bank_statement_excel_wizard_form(models.TransientModel):
     _name ='bank.statement.excel.wizard'
 
-
-
-
     
     def bank_statement_history_excel(self):
         bank_statement_line_ids = self._context.get('active_ids')
         bank_statement_obj = self.env['account.bank.statement']
-
 
         i = 0
         sheetName = 1

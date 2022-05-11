@@ -57,7 +57,8 @@ class account_bank_statement_wizard(models.TransientModel):
             file_input.seek(0)
             reader_info = []
             reader = csv.reader(file_input, delimiter=',')
- 
+
+
             try:
                 reader_info.extend(reader)
             except Exception:
@@ -77,6 +78,7 @@ class account_bank_statement_wizard(models.TransientModel):
             fp.seek(0)
             values = {}
             workbook = xlrd.open_workbook(fp.name)
+            #workbook = xlrd.open_workbook('c://01Enero 2022.xlsx')
             sheet = workbook.sheet_by_index(0)
             contador = 0
             if self.bank_opt == 'santander':
@@ -228,12 +230,15 @@ class account_bank_statement_wizard(models.TransientModel):
 #
     @api.multi
     def _create_statement_lines(self,val):
+        company=self.env.user.company_id.id
+        cartola_id=self._context.get('active_id')
+        journal_id=self.env['account.bank.statement'].search([('id','=',cartola_id)],limit=1).journal_id.id
         partner_id = self._find_partner(val.get('partner'))
         if not val.get('date'):
             raise Warning('Please Provide Date Field Value')
         if not val.get('memo'):
             raise Warning('Please Provide Memo Field Value')
-        aaa = self._cr.execute("insert into account_bank_statement_line (date,ref,partner_id,name,amount,statement_id) values (%s,%s,%s,%s,%s,%s)",(val.get('date'),val.get('ref'), partner_id,val.get('memo'),val.get('amount'),self._context.get('active_id')))
+        aaa = self._cr.execute("insert into account_bank_statement_line (date,ref,partner_id,name,amount,statement_id,journal_id,company_id) values (%s,%s,%s,%s,%s,%s,%s,%s)",(val.get('date'),val.get('ref'), partner_id,val.get('memo'),val.get('amount'),self._context.get('active_id'),journal_id,company))
         return True
 #
     def _find_partner(self,name):
